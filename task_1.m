@@ -5,6 +5,7 @@ n = 7;
 m = n - k;
 
 num_errors = 3;
+fprint("Number of errors introduced: %d", num_errors);
 
 % Generate different seeds for random functions
 rng('shuffle');
