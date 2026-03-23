@@ -1,6 +1,6 @@
 clear all
 close all
-frame_length = 1000;
+frame_length = 17/40*1000;
 
 %% 16QAM channel capacity 
 MI_16QAM_10db = 2.8;
@@ -31,7 +31,7 @@ crc_length = 32;
 mess_length = frame_length - crc_length;
 constraintLength = 7; 
 % Standard polynomials used in Wi-Fi/LTE (in octal)
-generatorPolys = [171 133]; 
+generatorPolys = [133 171 165]; 
 message = randi([0,1],mess_length,1);
 poly = 'z^32 + z^26 + z^23 + z^22 + z^16 + z^12 + z^11 + z^10 + z^8 + z^7 + z^5 + z^4 + z^2 + z + 1';
 
@@ -41,27 +41,21 @@ crcGen = crcGenerate(message, crcConf);
 MessageCrc = crcGen;
 
 trellis = poly2trellis(constraintLength, generatorPolys);
-
-% 2. Define the Puncture Pattern for Rate 5/7
-% We want 5 input bits to result in 7 output bits.
-% A Rate 1/2 encoder turns 5 input bits into 10 output bits.
-% Therefore, we need to delete (puncture) 3 out of every 10 bits.
-% 1 = transmit, 0 = puncture (delete)
-puncturePattern = [1; 1; 1; 0; 1; 0; 1; 1; 0; 1]; 
+puncVector = ones(51, 1);
+puncIndices = 3:3:(3 * 11);
+puncVector(puncIndices) = 0;
+puncturePattern = puncVector; 
 
 encodedData = convenc(MessageCrc, trellis, puncturePattern);
 
 % Calculate the actual code rate to verify
 actualRate = length(message) / length(encodedData);
-fprintf('Target Rate: %f (5/7)\n', 5/7);
+fprintf('Target Rate: %f (17/40)\n', 17/40);
 fprintf('Actual Rate achieved: %f\n', actualRate);
-
-scrambled_mess = 
-
 
 syms = qammod(encodedData, 4, "gray", InputType="bit", UnitAveragePower=true);
 
-RecSyms = awgn(syms, 10);
+RecSyms = awgn(syms, 5);
 
 ReceivedData = qamdemod(RecSyms, 4, "gray",OutputType="bit");
 

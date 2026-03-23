@@ -1,6 +1,6 @@
 clear all
 close all
-frame_length = 1000;
+frame_length = 14*100;
 
 %% 16QAM channel capacity 
 MI_16QAM_10db = 2.8;
@@ -47,7 +47,7 @@ trellis = poly2trellis(constraintLength, generatorPolys);
 % A Rate 1/2 encoder turns 5 input bits into 10 output bits.
 % Therefore, we need to delete (puncture) 3 out of every 10 bits.
 % 1 = transmit, 0 = puncture (delete)
-puncturePattern = [1; 1; 1; 0; 1; 0; 1; 1; 0; 1]; 
+puncturePattern = [1; 1; 1; 0; 1; 1; 1; 0; 1; 0; 1; 1; 1; 0]; 
 
 encodedData = convenc(MessageCrc, trellis, puncturePattern);
 
@@ -55,9 +55,6 @@ encodedData = convenc(MessageCrc, trellis, puncturePattern);
 actualRate = length(message) / length(encodedData);
 fprintf('Target Rate: %f (5/7)\n', 5/7);
 fprintf('Actual Rate achieved: %f\n', actualRate);
-
-scrambled_mess = 
-
 
 syms = qammod(encodedData, 4, "gray", InputType="bit", UnitAveragePower=true);
 
