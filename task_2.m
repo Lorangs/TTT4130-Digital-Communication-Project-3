@@ -1,8 +1,8 @@
 % Convolutional code
 
 k = 3;
-msg_len = 10;
-ramp_down = false;		% will ramp down the convolutional encoder at the end by padding the input message with trailing k-1 zeros.
+msg_len = 3;
+ramp_down = true;		% will ramp down the convolutional encoder at the end by padding the input message with trailing k-1 zeros.
 % generate test message
 msg = randi([0 1], 1, msg_len);
 disp("Initial message");
@@ -17,8 +17,8 @@ function encoded_msg = encode(msg, k, g1, g2, ramp_down)
 		padded_msg = [zeros(1, k-1) msg zeros(1, k-1)];
 		encoded_msg = zeros(1, 2*length(msg) + 2*(k-1));
 	else 
-		padded_msg = [zeros(1 ,k-1) msg];
-		encoded_msg = zeros(1, 2*length(msg) + (k-1));
+		padded_msg = [zeros(1, k-1) msg];
+		encoded_msg = zeros(1, 2*length(msg));
 	end
 
 	shift_reg = zeros(1, k);
@@ -30,7 +30,7 @@ function encoded_msg = encode(msg, k, g1, g2, ramp_down)
 	end
 end 
 
-encoded = encode(msg, k, g1, g2);
+encoded = encode(msg, k, g1, g2, ramp_down);
 disp("encoded message");
 disp(encoded);
 
