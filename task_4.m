@@ -56,9 +56,6 @@ actualRate = length(message) / length(encodedData);
 fprintf('Target Rate: %f (5/7)\n', 5/7);
 fprintf('Actual Rate achieved: %f\n', actualRate);
 
-scrambled_mess = 
-
-
 syms = qammod(encodedData, 4, "gray", InputType="bit", UnitAveragePower=true);
 
 RecSyms = awgn(syms, 10);
