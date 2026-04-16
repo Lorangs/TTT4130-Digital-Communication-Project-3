@@ -5,7 +5,7 @@ close all
 snr_db = 0:1:15;
 M = 16;
 k = log2(M);
-num_words = 10000;
+num_words = 100000;
 num_bits = num_words*k;
 msg = randi([0 1], num_bits, 1);
 
@@ -83,7 +83,6 @@ for i = 1:length(snr_db)
     demodulated_msg_conv_hard = qamdemod(noisy_signal, M, "gray", "OutputType","bit");
 
     decoded_msg_conv_hard = vitdec(demodulated_msg_conv_hard, trellis, 5*k_conv, "trunc", "hard");
-    %decoded_msg_conv_hard = decoded_msg_conv_hard(1 : end-(k_conv-1)); % remove padding
 
     % Compute BER for this SNR
     [numErrors_vec_conv_hard(i), ber_vec_conv_hard(i)] = biterr(msg(:), decoded_msg_conv_hard(:));
@@ -103,7 +102,6 @@ for i = 1:length(snr_db)
     demodulated_msg_conv_soft = qamdemod(noisy_signal, M, "gray", "OutputType","approxllr", "NoiseVariance",10^(-snr_db(i)/10));
 
     decoded_msg_conv_soft = vitdec(demodulated_msg_conv_soft, trellis,5*k_conv, "trunc", 'unquant');
-    %decoded_msg_conv_soft = decoded_msg_conv_soft(1 : end-(k_conv-1)); % remove padding
 
     % Compute BER for this SNR
     [numErrors_vec_conv_soft(1,i), ber_vec_conv_soft(1,i)] = biterr(msg(:), decoded_msg_conv_soft(:));

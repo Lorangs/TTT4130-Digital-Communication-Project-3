@@ -4,7 +4,7 @@ clear; close all; clc;
 
 %% 1. Configuration
 bits_per_symbol_list = 2:2:8; % Order: 1=BPSK, 2=QPSK, 3=8QAM, 4=16QAM
-SNR_dB_range = -10:0.5:30;  % SNR range in dB
+SNR_dB_range = -5:0.5:20;  % SNR range in dB
 
 % Initialize storage for plotting
 MI_results = zeros(length(bits_per_symbol_list), length(SNR_dB_range));
